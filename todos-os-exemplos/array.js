@@ -180,3 +180,88 @@ for (let valor of iteradorValores) {
 // maçã
 // banana
 // laranja
+
+// Exemplos e explicações dos métodos especiais de Array
+
+// 1. with() - Método que retorna uma cópia do array com um elemento modificado em um índice específico
+// Observação: Este é um método relativamente novo do JavaScript
+const fruta = ['maçã', 'banana', 'laranja'];
+const novasFrutas = fruta.with(1, 'morango'); // Modifica o índice 1
+console.log(novasFrutas); // ['maçã', 'morango', 'laranja']
+console.log(frutas); // Original permanece: ['maçã', 'banana', 'laranja']
+
+// 2. Symbol(Symbol.iterator) - Permite que o array seja iterável
+const numeros10 = [1, 2, 3];
+const iteradorW = numeros10[Symbol.iterator]();
+
+console.log(iterador.next()); // { value: 1, done: false }
+console.log(iterador.next()); // { value: 2, done: false }
+console.log(iterador.next()); // { value: 3, done: false }
+console.log(iterador.next()); // { value: undefined, done: true }
+
+// Exemplo prático usando for...of (que usa o iterator internamente)
+for (const numero of numeros) {
+    console.log(numero);
+}
+
+// 3. Symbol(Symbol.unscopables) - Define quais propriedades NÃO devem ser incluídas 
+// em um escopo with (raramente usado)
+const unscopables = Array.prototype[Symbol.unscopables];
+console.log(unscopables);
+// Retorna um objeto com propriedades que não devem ser incluídas:
+// {
+//   copyWithin: true,
+//   entries: true,
+//   fill: true,
+//   find: true,
+//   findIndex: true,
+//   includes: true,
+//   keys: true,
+//   values: true
+// }
+
+// Exemplo prático dos métodos em conjunto
+const lista = ['a', 'b', 'c', 'd'];
+
+// Usando with() para modificar um elemento
+const novaLista = lista.with(2, 'x');
+console.log('Lista com elemento modificado:', novaLista); // ['a', 'b', 'x', 'd']
+
+// Usando iterator para percorrer
+console.log('\nPercorrendo com iterator:');
+for (const item of lista) {
+    console.log(item);
+}
+
+// Exemplo de uso real
+class CarrinhoDeCompras {
+    constructor() {
+        this.items = ['Maçã', 'Banana', 'Laranja'];
+    }
+
+    // Usando Symbol.iterator para tornar o carrinho iterável
+    [Symbol.iterator]() {
+        return this.items[Symbol.iterator]();
+    }
+
+    // Método para substituir um item
+    substituirItem(indice, novoItem) {
+        this.items = this.items.with(indice, novoItem);
+        return this.items;
+    }
+}
+
+const carrinho = new CarrinhoDeCompras();
+
+// Iterando sobre o carrinho
+console.log('\nItens no carrinho:');
+for (const item of carrinho) {
+    console.log(item);
+}
+
+// Substituindo um item
+console.log('\nSubstituindo Banana por Morango:');
+carrinho.substituirItem(1, 'Morango');
+for (const item of carrinho) {
+    console.log(item);
+}
